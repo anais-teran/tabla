@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Plataformas Digitales</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/4b8b6e8e7a.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-2 text-primary"><i class="fa-solid fa-table"></i> Plataformas Digitales</h1>
+        <p class="mb-4">Visualización de datos de las principales plataformas digitales</p>
+        <div class="card mb-3 p-3">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-4">
+                    <label for="filtroPais" class="form-label">Filtrar por país:</label>
+                    <select id="filtroPais" class="form-select">
+                        <option value="Todos">Todos los países</option>
+                        {% for pais in paises %}
+                        <option value="{{ pais }}">{{ pais }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="ordenarPor" class="form-label">Ordenar por:</label>
+                    <select id="ordenarPor" class="form-select">
+                        <option value="nombre">Nombre</option>
+                        <option value="usuarios">Usuarios</option>
+                        <option value="fundado">Año Fundación</option>
+                        <option value="pais">País</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="direccion" class="form-label">Dirección:</label>
+                    <select id="direccion" class="form-select">
+                        <option value="asc">Ascendente</option>
+                        <option value="desc">Descendente</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="tablaPlataformas" class="table table-striped table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Usuarios</th>
+                        <th>Año Fundación</th>
+                        <th>País</th>
+                        <th>Detalles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for plataforma in datos %}
+                    <tr data-pais="{{ plataforma.pais }}">
+                        <td>
+                            <span class="icono">
+                                {% if plataforma.icono == 'discord' %}<i class="fa-brands fa-discord"></i>{% endif %}
+                                {% if plataforma.icono == 'instagram' %}<i class="fa-brands fa-instagram"></i>{% endif %}
+                                {% if plataforma.icono == 'netflix' %}<i class="fa-brands fa-netflix"></i>{% endif %}
+                                {% if plataforma.icono == 'spotify' %}<i class="fa-brands fa-spotify"></i>{% endif %}
+                                {% if plataforma.icono == 'tiktok' %}<i class="fa-brands fa-tiktok"></i>{% endif %}
+                                {% if plataforma.icono == 'twitch' %}<i class="fa-brands fa-twitch"></i>{% endif %}
+                                {% if plataforma.icono == 'youtube' %}<i class="fa-brands fa-youtube"></i>{% endif %}
+                            </span>
+                            {{ plataforma.nombre }}
+                        </td>
+                        <td><span class="badge bg-primary">{{ plataforma.usuarios }}</span></td>
+                        <td>{{ plataforma.fundado }}</td>
+                        <td><span class="badge bg-secondary">{{ plataforma.pais }}</span></td>
+                        <td><button class="btn btn-info btn-sm"><i class="fa-solid fa-circle-info"></i></button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="mt-2 text-end text-muted">Mostrando {{ datos|length }} plataformas</div>
+        <footer class="mt-4 text-center text-muted">
+            Visualización de datos desarrollada con Flask y Bootstrap.<br>
+            Los datos mostrados son ficticios para fines educativos.
+        </footer>
+    </div>
+    <script>
+        // Filtrado y ordenamiento JS
+        const filtroPais = document.getElementById('filtroPais');
+        const ordenarPor = document.getElementById('ordenarPor');
+        const direccion = document.getElementById('direccion');
+        const tabla = document.getElementById('tablaPlataformas').getElementsByTagName('tbody')[0];
+        let filasOriginales = Array.from(tabla.rows);
+
+        function filtrarYOrdenar() {
+            let pais = filtroPais.value;
+            let campo = ordenarPor.value;
+            let dir = direccion.value;
+            let filas = filasOriginales.filter(row => {
+                return pais === 'Todos' || row.getAttribute('data-pais') === pais;
+            });
+            filas.sort((a, b) => {
+                let va = a.cells[ordenarPor.selectedIndex].textContent;
+                let vb = b.cells[ordenarPor.selectedIndex].textContent;
+                if(campo === 'usuarios') {
+                    va = va.replace(/[^\d\.]/g, '');
+                    vb = vb.replace(/[^\d\.]/g, '');
+                    va = parseFloat(va);
+                    vb = parseFloat(vb);
+                }
+                if(dir === 'asc') return va > vb ? 1 : va < vb ? -1 : 0;
+                else return va < vb ? 1 : va > vb ? -1 : 0;
+            });
+            tabla.innerHTML = '';
+            filas.forEach(f => tabla.appendChild(f));
+        }
+        filtroPais.addEventListener('change', filtrarYOrdenar);
+        ordenarPor.addEventListener('change', filtrarYOrdenar);
+        direccion.addEventListener('change', filtrarYOrdenar);
+    </script>
+</body>
+</html>

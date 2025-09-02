@@ -1,0 +1,66 @@
+
+body {
+    background-color: #c1cdd8;
+}
+
+h1 {
+    color: #06215a;
+    font-weight: bold;
+    text-align: left;
+    font-size: 2.2rem;
+}
+
+.card {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border-radius: 12px;
+}
+
+.table {
+    margin: auto;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.table-dark th {
+    background-color: #212529;
+    color: #d89898;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.icono {
+    font-size: 1.3rem;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.badge {
+    font-size: 1rem;
+    padding: 0.5em 0.8em;
+    border-radius: 8px;
+}
+
+.btn-info {
+    color: #d8b1b1;
+    background-color: #13525f;
+    border: none;
+}
+
+.btn-info:hover {
+    background-color: #14667a;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+.table-responsive {
+    margin-bottom: 1rem;
+}
+
+footer {
+    font-size: 0.95rem;
+    color: #6c757d;
+}
